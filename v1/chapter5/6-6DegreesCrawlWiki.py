@@ -12,20 +12,17 @@ def pageScraped(url):
     if cur.rowcount == 0:
         return False
     page = cur.fetchone()
-    
+
     cur.execute("SELECT * FROM links WHERE fromPageId = %s", (int(page[0])))
-    if cur.rowcount == 0:
-        return False
-    return True
+    return cur.rowcount != 0
 
 def insertPageIfNotExists(url):
     cur.execute("SELECT * FROM pages WHERE url = %s", (url))
-    if cur.rowcount == 0:
-        cur.execute("INSERT INTO pages (url) VALUES (%s)", (url))
-        conn.commit()
-        return cur.lastrowid
-    else:
+    if cur.rowcount != 0:
         return cur.fetchone()[0]
+    cur.execute("INSERT INTO pages (url) VALUES (%s)", (url))
+    conn.commit()
+    return cur.lastrowid
 
 def insertLink(fromPageId, toPageId):
     cur.execute("SELECT * FROM links WHERE fromPageId = %s AND toPageId = %s", (int(fromPageId), int(toPageId)))
@@ -38,7 +35,7 @@ def getLinks(pageUrl, recursionLevel):
     if recursionLevel > 4:
         return
     pageId = insertPageIfNotExists(pageUrl)
-    html = urlopen("http://en.wikipedia.org"+pageUrl)
+    html = urlopen(f"http://en.wikipedia.org{pageUrl}")
     bsObj = BeautifulSoup(html, "html.parser")
     for link in bsObj.findAll("a", href=re.compile("^(/wiki/)((?!:).)*$")):
         insertLink(pageId, insertPageIfNotExists(link.attrs['href']))

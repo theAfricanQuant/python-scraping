@@ -10,10 +10,8 @@ def cleanFile(filePath, newFilePath):
 
     #call tesseract to do OCR on the newly created image
     subprocess.call(["tesseract", newFilePath, "output"])
-    
-    #Open and read the resulting data file
-    outputFile = open("output.txt", 'r')
-    print(outputFile.read())
-    outputFile.close()
+
+    with open("output.txt", 'r') as outputFile:
+        print(outputFile.read())
 
 cleanFile("text_2.png", "text_2_clean.png")

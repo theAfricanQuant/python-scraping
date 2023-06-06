@@ -35,22 +35,40 @@ def scrape_article(taskQueue, foundUrlsQueue):
             #This should be rare
             time.sleep(.1)
         path = taskQueue.get()
-        html = urlopen('http://en.wikipedia.org{}'.format(path))
+        html = urlopen(f'http://en.wikipedia.org{path}')
         time.sleep(5)
         bsObj = BeautifulSoup(html, 'html.parser')
         title = bsObj.find('h1').get_text()
-        print('Scraping {} in process {}'.format(title, os.getpid()))
+        print(f'Scraping {title} in process {os.getpid()}')
         links = get_links(bsObj)
         #Send these to the delegator for processing
         foundUrlsQueue.put(links)
 
 
-processes = []
 taskQueue = Queue()
 foundUrlsQueue = Queue()
-processes.append(Process(target=task_delegator, args=(taskQueue, foundUrlsQueue,)))
-processes.append(Process(target=scrape_article, args=(taskQueue, foundUrlsQueue,)))
-processes.append(Process(target=scrape_article, args=(taskQueue, foundUrlsQueue,)))
-
+processes = [
+    Process(
+        target=task_delegator,
+        args=(
+            taskQueue,
+            foundUrlsQueue,
+        ),
+    ),
+    Process(
+        target=scrape_article,
+        args=(
+            taskQueue,
+            foundUrlsQueue,
+        ),
+    ),
+    Process(
+        target=scrape_article,
+        args=(
+            taskQueue,
+            foundUrlsQueue,
+        ),
+    ),
+]
 for p in processes:
     p.start()

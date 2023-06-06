@@ -16,7 +16,7 @@ def store(title, content):
     cur.connection.commit()
 
 def getLinks(articleUrl):
-    html = urlopen("http://en.wikipedia.org"+articleUrl)
+    html = urlopen(f"http://en.wikipedia.org{articleUrl}")
     bsObj = BeautifulSoup(html, "html.parser")
     title = bsObj.find("h1").get_text()
     content = bsObj.find("div", {"id":"mw-content-text"}).find("p").get_text()

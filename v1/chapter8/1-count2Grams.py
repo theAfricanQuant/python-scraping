@@ -15,7 +15,7 @@ def cleanInput(input):
     input = input.split(' ')
     for item in input:
         item = item.strip(string.punctuation)
-        if len(item) > 1 or (item.lower() == 'a' or item.lower() == 'i'):
+        if len(item) > 1 or item.lower() in ['a', 'i']:
             cleanInput.append(item)
     return cleanInput
 

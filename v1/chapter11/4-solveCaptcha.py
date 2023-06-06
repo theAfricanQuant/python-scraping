@@ -20,7 +20,7 @@ formBuildId = bsObj.find("input", {"name":"form_build_id"})["value"]
 captchaSid = bsObj.find("input", {"name":"captcha_sid"})["value"]
 captchaToken = bsObj.find("input", {"name":"captcha_token"})["value"]
 
-captchaUrl = "http://pythonscraping.com"+imageLocation
+captchaUrl = f"http://pythonscraping.com{imageLocation}"
 urlretrieve(captchaUrl, "captcha.jpg")
 cleanImage("captcha.jpg")
 p = subprocess.Popen(["tesseract", "captcha.jpg", "captcha"], stdout=
@@ -30,7 +30,7 @@ f = open("captcha.txt", "r")
 
 #Clean any whitespace characters
 captchaResponse = f.read().replace(" ", "").replace("\n", "")
-print("Captcha solution attempt: "+captchaResponse)
+print(f"Captcha solution attempt: {captchaResponse}")
 
 if len(captchaResponse) == 5:
     params = {"captcha_token":captchaToken, "captcha_sid":captchaSid,   

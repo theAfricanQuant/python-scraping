@@ -13,6 +13,6 @@ class ArticleSpider(CrawlSpider):
     def parse_item(self, response):
         item = Article()
         title = response.xpath('//h1/text()')[0].extract()
-        print("Title is: "+title)
+        print(f"Title is: {title}")
         item['title'] = title
         return item

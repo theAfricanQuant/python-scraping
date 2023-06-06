@@ -18,9 +18,9 @@ class ArticleSpider(CrawlSpider):
             text = response.xpath('//div[@id="mw-content-text"]//text()').extract()
             lastUpdated = response.css('li#footer-info-lastmod::text').extract_first()
             lastUpdated = lastUpdated.replace('This page was last edited on ', '')
-            print('Title is: {} '.format(title))
-            print('title is: {} '.format(title))
-            print('text is: {}'.format(text))
+            print(f'Title is: {title} ')
+            print(f'title is: {title} ')
+            print(f'text is: {text}')
         else:
-            print('This is not an article: {}'.format(title))
+            print(f'This is not an article: {title}')
 

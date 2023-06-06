@@ -24,7 +24,7 @@ def buildWordDict(text):
     #in the Markov chain
     punctuation = [',','.',';',':']
     for symbol in punctuation:
-        text = text.replace(symbol, " "+symbol+" ")
+        text = text.replace(symbol, f" {symbol} ")
 
     words = text.split(" ")
     #Filter out empty words
@@ -48,8 +48,8 @@ wordDict = buildWordDict(text)
 length = 100
 chain = ""
 currentWord = "I"
-for i in range(0, length):
-    chain += currentWord+" "
+for _ in range(0, length):
+    chain += f"{currentWord} "
     #print(wordDict[currentWord])
     currentWord = retrieveRandomWord(wordDict[currentWord])
 

@@ -3,7 +3,7 @@ import time
 
 def print_time(threadName, delay, iterations):
     start = int(time.time())
-    for i in range(0,iterations):
+    for _ in range(0,iterations):
         time.sleep(delay)
         seconds_elapsed = str(int(time.time()) - start)
         print (threadName if threadName else seconds_elapsed)

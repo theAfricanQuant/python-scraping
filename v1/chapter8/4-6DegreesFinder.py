@@ -9,24 +9,17 @@ cur.execute("USE wikipedia")
 
 def getUrl(pageId):
     cur.execute("SELECT url FROM pages WHERE id = %s", (int(pageId)))
-    if cur.rowcount == 0:
-        return None
-    return cur.fetchone()[0]
+    return None if cur.rowcount == 0 else cur.fetchone()[0]
 
 def getLinks(fromPageId):
     cur.execute("SELECT toPageId FROM links WHERE fromPageId = %s", (int(fromPageId)))
-    if cur.rowcount == 0:
-        return None
-    return [x[0] for x in cur.fetchall()]
+    return None if cur.rowcount == 0 else [x[0] for x in cur.fetchall()]
 
 def searchBreadth(targetPageId, currentPageId, depth, nodes):
     if nodes is None or len(nodes) == 0:
         return None
     if depth <= 0:
-        for node in nodes:
-            if node == targetPageId:
-                return [node]
-        return None
+        return next(([node] for node in nodes if node == targetPageId), None)
     #depth is greater than 0 -- go deeper!
     for node in nodes:
         found = searchBreadth(targetPageId, node, depth-1, getLinks(node))
